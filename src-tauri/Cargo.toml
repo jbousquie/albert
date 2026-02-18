@@ -28,7 +28,10 @@ directories = "6.0"
 tokio = { version = "1.45.0", features = ["full"] }
 mp3_splitter = { git = "https://github.com/jbousquie/mp3_splitter.git" }
 wav_splitter = { git = "https://github.com/jbousquie/wav_splitter.git" }
-transcription_albert = { path = "../transcription_albert" }
+transcription_albert = { git = "https://github.com/jbousquie/transcription_albert.git" }
 tauri-plugin-shell = "2"
 tauri-plugin-process = "2"
 tauri-plugin-store = "2"
+
+[patch."https://github.com/jbousquie/transcription_albert.git"]
+transcription_albert = { path = "../transcription_albert" }

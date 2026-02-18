@@ -1,0 +1,13 @@
+# Build artifacts
+target/
+**/target/
+
+# API key file (sensitive)
+albertine.key
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
