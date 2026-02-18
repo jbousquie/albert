@@ -12,7 +12,6 @@ dist
 dist-ssr
 *.local
 *.lock
-src-tauri/Cargo.lock
 src-tauri/target
 
 pnpm-lock.yaml
