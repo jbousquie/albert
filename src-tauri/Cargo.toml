@@ -1,6 +1,6 @@
 [package]
 name = "albertine"
-version = "0.5.2"
+version = "0.5.3"
 description = "A Tauri App"
 authors = ["Jérome Bousquié"]
 license = ""
@@ -23,13 +23,12 @@ serde = { version = "1.0", features = ["derive"] }
 log = "0.4"
 tauri = { version = "2.4.1", features = [] }
 tauri-plugin-log = "2.0.0-rc"
-tauri-plugin-dialog = "2.2.2"   
+tauri-plugin-dialog = "2.2.2"
 directories = "6.0"
 tokio = { version = "1.45.0", features = ["full"] }
 mp3_splitter = { git = "https://github.com/jbousquie/mp3_splitter.git" }
 wav_splitter = { git = "https://github.com/jbousquie/wav_splitter.git" }
-transcription_albert = { git = "https://github.com/jbousquie/transcription_albert.git" }
+transcription_albert = { path = "../transcription_albert" }
 tauri-plugin-shell = "2"
 tauri-plugin-process = "2"
 tauri-plugin-store = "2"
-

@@ -5,20 +5,19 @@
 // pnpm tauri add process
 // pnpm tauri add store
 
-
 import "./style.css";
 import "./code_lang.ts";
 import { languageCodes } from "./code_lang.ts";
 
 import { invoke } from "@tauri-apps/api/core";
-import { getCurrentWebview } from "@tauri-apps/api/webview";
+import { getCurrentWebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { open } from "@tauri-apps/plugin-dialog";
 import { open as openExternal } from "@tauri-apps/plugin-shell";
 import { exit, relaunch } from "@tauri-apps/plugin-process";
-import { load, Store } from '@tauri-apps/plugin-store';
+import { load, Store } from "@tauri-apps/plugin-store";
 
 // Version number
-const VERSION = "0.5.2";
+const VERSION = "0.5.3";
 
 // Default chunk duration (in minutes)
 const CHUNKDURATION = 10;
@@ -68,11 +67,12 @@ const sortedLanguageCodes = (() => {
 // Initialize the app with settings from store
 async function initializeApp() {
   try {
-    store = await load('store.json');
-    storedChunkDuration = await store.get<number>('chunk_duration') || CHUNKDURATION;
-    storedLanguage = await store.get<string>('language') || "fr";
-    storedNoProxy = await store.get<boolean>('no_proxy') || false;
-    
+    store = await load("store.json");
+    storedChunkDuration =
+      (await store.get<number>("chunk_duration")) || CHUNKDURATION;
+    storedLanguage = (await store.get<string>("language")) || "fr";
+    storedNoProxy = (await store.get<boolean>("no_proxy")) || false;
+
     updateUIWithStoredSettings();
     await invoke("download_api_key");
     console.log("Settings loaded successfully");
@@ -83,20 +83,28 @@ async function initializeApp() {
 
 // Update UI elements with stored settings
 function updateUIWithStoredSettings() {
-  const chunkDurationSlider = document.getElementById("chunk-duration") as HTMLInputElement;
-  const chunkDurationValue = document.getElementById("chunk-duration-value") as HTMLDivElement;
-  
+  const chunkDurationSlider = document.getElementById(
+    "chunk-duration",
+  ) as HTMLInputElement;
+  const chunkDurationValue = document.getElementById(
+    "chunk-duration-value",
+  ) as HTMLDivElement;
+
   if (chunkDurationSlider && chunkDurationValue) {
     chunkDurationSlider.value = storedChunkDuration.toString();
     chunkDurationValue.textContent = storedChunkDuration.toString();
   }
-  
-  const languageSelect = document.getElementById("transcription-language") as HTMLSelectElement;
+
+  const languageSelect = document.getElementById(
+    "transcription-language",
+  ) as HTMLSelectElement;
   if (languageSelect) {
     languageSelect.value = storedLanguage;
   }
-  
-  const noProxyCheckbox = document.getElementById("no-proxy") as HTMLInputElement;
+
+  const noProxyCheckbox = document.getElementById(
+    "no-proxy",
+  ) as HTMLInputElement;
   if (noProxyCheckbox) {
     noProxyCheckbox.checked = storedNoProxy;
   }
@@ -688,7 +696,7 @@ fileDropArea.addEventListener("dragleave", (event) => {
 let _unlisten: () => void;
 
 async function setupDragDropListener() {
-  _unlisten = await getCurrentWebview().onDragDropEvent((event) => {
+  _unlisten = await getCurrentWebviewWindow().onDragDropEvent((event) => {
     if (event.payload.type === "drop") {
       const filePath = event.payload.paths[0];
       handleFile(filePath);
@@ -788,14 +796,14 @@ async function handleChunkDurationChange() {
   chunkDuration = parseInt(chunkDurationSlider.value);
   chunkDurationValue.textContent = chunkDurationSlider.value;
   if (store) {
-    await store.set('chunk_duration', chunkDuration);
+    await store.set("chunk_duration", chunkDuration);
   }
 }
 
 async function handleLanguageChange() {
   transcriptionLanguage = languageSelect.value;
   if (store) {
-    await store.set('language', transcriptionLanguage);
+    await store.set("language", transcriptionLanguage);
   }
   console.log(
     `Transcription language set to: ${transcriptionLanguage} (${languageCodes[transcriptionLanguage as keyof typeof languageCodes]})`,
@@ -805,7 +813,7 @@ async function handleLanguageChange() {
 async function handleProxyChange() {
   useSystemProxy = !noProxyCheckbox.checked;
   if (store) {
-    await store.set('no_proxy', !useSystemProxy);
+    await store.set("no_proxy", !useSystemProxy);
   }
   console.log(`Use system proxy: ${useSystemProxy}`);
 }
